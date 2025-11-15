@@ -6,8 +6,6 @@ public class PathFindingQueue<T>
     // First Element is the Tile, 2nd is the cost to reach it
     private List<Tuple<T, int>> elements = new List<Tuple<T, int>>();
 
-    public int Count => elements.Count; 
-
     public void Enqueue(T item, int priority){ elements.Add(Tuple.Create(item, priority)); }
 
     public T Dequeue()
@@ -25,5 +23,8 @@ public class PathFindingQueue<T>
         elements.RemoveAt(bestIndex);
         return bestItem;
     }
+
+    // NOTE : I prefer using getters but seeing as PathFindingQueue is a data struct, using a property seems more apropriate
+    public int Count => elements.Count;
 }
 
