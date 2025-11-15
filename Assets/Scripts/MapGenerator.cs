@@ -6,8 +6,8 @@ public class MapGenerator : MonoBehaviour
     public GameObject tilePrefab;
 
     [Header("Grid Values")]
-    public int sizeX = 20;
-    public int sizeY = 20;
+    [Min(0)] public int sizeX = 15;
+    [Min(0)] public int sizeY = 15;
     public Tile[,] grid;
 
     // Data struct for the Graph reprensation of the Grid

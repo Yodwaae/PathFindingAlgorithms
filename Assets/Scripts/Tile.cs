@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 public enum TileType {
     Plains,
     Wall,
-    Wood
+    Woods
 }
 
 // TODO : See how I can improve the tile enum/system with scriptable so that the visual assets and cost of the tile are directly linked
@@ -26,7 +26,7 @@ public class Tile : MonoBehaviour
     private int yCoord;
 
     // === Components ===
-    private TextMeshPro tileText;
+    private TextMeshProUGUI tileText;
     private Renderer tileRenderer;
 
     // === SETTERS ===
@@ -49,7 +49,7 @@ public class Tile : MonoBehaviour
                 wall.SetActive(true);
                 break;
 
-            case TileType.Wood:
+            case TileType.Woods:
                 woods.SetActive(true);
                 wall.SetActive(false);
                 break;
@@ -63,13 +63,13 @@ public class Tile : MonoBehaviour
     public TileType GetTileType() { return tileType; }
     public Color GetColor() { return tileRenderer.material.color; }
     public string GetText() { return tileText.text; }
-    public int GetCost(){ return 0; } // TODO To implement but I want to avoid a simple switch/Case with magics numbers
+    public int GetCost(){ return 1; } // TODO To implement but I want to avoid a simple switch/Case with magics numbers
 
     // NOTE : Need to be awake so it's initialised before MapGenerator Start
     private void Awake()
     {
         // Get the components
-        tileText = GetComponentInChildren<TextMeshPro>();
+        tileText = GetComponentInChildren<TextMeshProUGUI>();
         tileRenderer = GetComponent<Renderer>();
     }
 
