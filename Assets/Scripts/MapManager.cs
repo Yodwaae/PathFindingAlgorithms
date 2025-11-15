@@ -19,18 +19,16 @@ public class MapManager : MonoBehaviour
         // Call the path finding algo
         Queue<Tile> path = pathFinding.FindPath(startTile, endTile);
         
-        // Change the color of the tiles on the paths
+        // Change the color of the tiles on the paths (excluding the start and end tile)
         if (path != null)
             foreach (Tile tile in path)
-                tile.SetColor(new Color(1, 0.6f, 0));
+                if (tile != endTile && tile != startTile)
+                    tile.SetColor(Color.white);
+                
     }
 
     private void HandleInput()
     {
-        // Display the tiles coord while space is held down
-        if (Input.GetKeyDown(KeyCode.Space))
-            foreach (Tile tile in mapGenerator.grid)
-                tile.SetText("[" + tile.GetXCoord() + ", " + tile.GetYCoord() + "]");
 
         // Check the player tile hovering (todo redo this comment)
         Tile tileUnderMouse = GetTileUnderMouse();
@@ -84,13 +82,13 @@ public class MapManager : MonoBehaviour
         // End Tile
         if (endTile != null) {
             endTile.SetColor(Color.red);
-            endTile.SetText("End");
+            endTile.SetText("END");
         }
 
         // Start Tile
         if (startTile != null){
             startTile.SetColor(Color.green);
-            startTile.SetText("Start");
+            startTile.SetText("START");
         }
 
         // If there's both a start and end tile, launch the path finding

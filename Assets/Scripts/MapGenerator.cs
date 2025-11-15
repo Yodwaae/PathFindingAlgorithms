@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    [Header("Tile Object")]
     public GameObject tilePrefab;
 
     [Header("Grid Values")]
@@ -10,13 +11,19 @@ public class MapGenerator : MonoBehaviour
     [Min(0)] public int sizeY = 15;
     public Tile[,] grid;
 
-    // Data struct for the Graph reprensation of the Grid
+    // Data struct for the Graph representation of the Grid
     private Dictionary<Tile, Tile[]> neighborDictionary;
+
+    // Color for unused tiles
+    private Color unusedColor = new Color(0.588235f, 0.588235f, 0.588235f);
 
     void Awake()
     {
+        // Initialisation
         grid = new Tile[sizeX, sizeY];
         neighborDictionary = new Dictionary<Tile, Tile[]>();
+
+        // Map generation
         GenerateMap(sizeX, sizeY);
     }
 
@@ -55,7 +62,7 @@ public class MapGenerator : MonoBehaviour
     {
         // Set the tiles back to their default value
         foreach (Tile tile in grid){
-            tile.SetColor(Color.white);
+            tile.SetColor(unusedColor);
             tile.SetText("");
         }
     }
