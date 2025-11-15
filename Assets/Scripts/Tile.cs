@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour
 
     // NOTE : This are the game object that will be displayed on the tile depending on it's type
     [Header("Visuals Assets References")]
-    public GameObject wood;
+    public GameObject woods;
     public GameObject wall;
 
 
@@ -40,17 +40,17 @@ public class Tile : MonoBehaviour
         // Activate differents visuals assets based on the tile type
         switch (tileType) {
             case TileType.Plains:
-                wood.SetActive(false);
+                woods.SetActive(false);
                 wall.SetActive(false);
                 break;
 
             case TileType.Wall:
-                wood.SetActive(false);
+                woods.SetActive(false);
                 wall.SetActive(true);
                 break;
 
             case TileType.Wood:
-                wood.SetActive(true);
+                woods.SetActive(true);
                 wall.SetActive(false);
                 break;
         }
@@ -65,7 +65,8 @@ public class Tile : MonoBehaviour
     public string GetText() { return tileText.text; }
     public int GetCost(){ return 0; } // TODO To implement but I want to avoid a simple switch/Case with magics numbers
 
-    private void Start()
+    // NOTE : Need to be awake so it's initialised before MapGenerator Start
+    private void Awake()
     {
         // Get the components
         tileText = GetComponentInChildren<TextMeshPro>();
