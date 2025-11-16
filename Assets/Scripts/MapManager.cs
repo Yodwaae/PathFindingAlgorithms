@@ -52,7 +52,7 @@ public class MapManager : MonoBehaviour
         {
             // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
             if (traveler == null)
-                traveler = Instantiate(travelerPrefab, startTile.transform.position, Quaternion.identity).GetComponent<Traveler>();
+                traveler = Instantiate(travelerPrefab, startTile.transform.position, Quaternion.identity).GetComponent<Traveler>(); //TODO Fix the traveler half in the ground
             else
                 traveler.transform.position = traveler.transform.position;
 

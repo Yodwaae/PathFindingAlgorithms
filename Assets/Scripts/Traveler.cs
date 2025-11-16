@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Traveler : MonoBehaviour
@@ -8,12 +9,13 @@ public class Traveler : MonoBehaviour
     public float moveSpeed = 1f;
     public float startWaitTime = 1f;
 
-    private Queue<Tile> pathToFollow;
+    private Stack<Tile> pathToFollow;
 
     public void SetPath(Queue<Tile> path)
     {
-        // Set the path
-        pathToFollow = path;
+        // NOTE: The path is ordered from end to start, 
+        // we reverse it using a stack so the traveler can move from start to end (FIFO -> LIFO)
+        pathToFollow = new Stack<Tile>(path);
 
         // Stop any movements already in progress then restart the movement
         StopAllCoroutines();
@@ -26,14 +28,14 @@ public class Traveler : MonoBehaviour
         yield return new WaitForSeconds(startWaitTime);
 
         // Get the first tile of the path (startTile) as the first pos
-        Tile lastTile = pathToFollow.Dequeue();
+        Tile lastTile = pathToFollow.Pop();
 
         // While there is still tile in the path
         while (pathToFollow.Count > 0)
         {
             // Reset the lerpValue, set the next tile to reach and rotate the model so it faces the path
             float lerpValue = 0;
-            Tile nextTile = pathToFollow.Dequeue();
+            Tile nextTile = pathToFollow.Pop();
             transform.LookAt(nextTile.transform, Vector3.up);
 
             // While we haven't the center of the next tile keep moving
