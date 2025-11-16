@@ -11,7 +11,7 @@ public enum Algorithm
 public class PathFindingAlgorithm : MonoBehaviour
 {
     [Header("Path Finding Algorithm")]
-    public Algorithm currentAlgorithm;
+    [SerializeField] private Algorithm currentAlgorithm;
 
     private MapGenerator mapGenerator;
     private void Start(){ mapGenerator = FindFirstObjectByType<MapGenerator>(); }
@@ -85,6 +85,9 @@ public class PathFindingAlgorithm : MonoBehaviour
         path.Enqueue(start);
         return path;
     }
+
+    public void SetAlgorithm(Algorithm algorithm) {
+        currentAlgorithm = algorithm; }
 
     // Helper function
     int Distance(Tile tile1, Tile tile22) { return Mathf.Abs(tile1.GetXCoord() - tile22.GetXCoord()) + Mathf.Abs(tile1.GetYCoord() - tile22.GetYCoord()); }

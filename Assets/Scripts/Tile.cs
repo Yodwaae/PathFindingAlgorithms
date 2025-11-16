@@ -6,10 +6,11 @@ using UnityEngine.UIElements;
 public enum TileType {
     Plains,
     Wall,
-    Woods
+    Woods,
+    River,
+    Road
 }
 
-// TODO : See how I can improve the tile enum/system with scriptable so that the visual assets and cost of the tile are directly linked
 
 public class Tile : MonoBehaviour
 {
@@ -18,7 +19,8 @@ public class Tile : MonoBehaviour
     [Header("Visuals Assets References")]
     public GameObject woods;
     public GameObject wall;
-
+    public GameObject road;
+    public GameObject river;
 
     // === Tile values ===
     private TileType tileType = TileType.Plains;
@@ -36,22 +38,29 @@ public class Tile : MonoBehaviour
     public void SetTileType(TileType type)
     {
         tileType = type;
+        woods.SetActive(false);
+        wall.SetActive(false);
+        road.SetActive(false);
+        river.SetActive(false);
+
 
         // Activate differents visuals assets based on the tile type
         switch (tileType) {
-            case TileType.Plains:
-                woods.SetActive(false);
-                wall.SetActive(false);
-                break;
 
             case TileType.Wall:
-                woods.SetActive(false);
                 wall.SetActive(true);
                 break;
 
             case TileType.Woods:
                 woods.SetActive(true);
-                wall.SetActive(false);
+                break;
+
+            case TileType.Road:
+                road.SetActive(true);
+                break;
+
+            case TileType.River:
+                river.SetActive(true);
                 break;
         }
     }
@@ -63,7 +72,27 @@ public class Tile : MonoBehaviour
     public TileType GetTileType() { return tileType; }
     public Color GetColor() { return tileRenderer.material.color; }
     public string GetText() { return tileText.text; }
-    public int GetCost(){ return 1; } // TODO To implement but I want to avoid a simple switch/Case with magics numbers
+    // NOTE I wanted to avoid a switch case with magics numbers but for a project this small the other approach seemed overkill
+    public int GetCost()
+    {
+        switch (tileType){
+
+            case TileType.Road:
+                return 0;
+
+            case TileType.Plains:
+                return 1;
+
+            case TileType.Woods:
+                return 3;
+
+            case TileType.River:
+                return 5;
+
+            default:
+                return 0;
+        }
+    } 
 
     // NOTE : Need to be awake so it's initialised before MapGenerator Start
     private void Awake()

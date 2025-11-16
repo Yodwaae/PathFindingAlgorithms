@@ -29,7 +29,20 @@ public class MapManager : MonoBehaviour
 
     private void HandleInput()
     {
+        // ===== ALGORITHM CHANGE =====
+        if (Input.GetKey(KeyCode.Q))
+        {
+            pathFinding.SetAlgorithm(Algorithm.AStar);
+            RepaintMap();
+        }
 
+        if (Input.GetKey(KeyCode.D))
+        {
+            pathFinding.SetAlgorithm(Algorithm.Dijkstra);
+            RepaintMap();
+        }
+
+        // ===== TILES MODIFICATION =====
         // Check the player tile hovering (todo redo this comment)
         Tile tileUnderMouse = GetTileUnderMouse();
 
@@ -37,16 +50,16 @@ public class MapManager : MonoBehaviour
         if (tileUnderMouse == null || tileUnderMouse == endTile || tileUnderMouse == startTile)
             return;
 
-        // START (can't be placed on a wall)
-        if (Input.GetMouseButtonDown(0) && tileUnderMouse.GetTileType() != TileType.Wall) 
+        // START
+        if (Input.GetMouseButtonDown(0) && CanPlace(tileUnderMouse))
             startTile = tileUnderMouse;
 
-        // END (can't be placed on a wall)
-        if (Input.GetMouseButtonDown(1) && tileUnderMouse.GetTileType() != TileType.Wall) 
+        // END
+        if (Input.GetMouseButtonDown(1) && CanPlace(tileUnderMouse))
             endTile = tileUnderMouse;
         
         // PLAINS
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.A))
             tileUnderMouse.SetTileType(TileType.Plains);
         
         // WOODS
@@ -56,6 +69,14 @@ public class MapManager : MonoBehaviour
         // WALL
         if (Input.GetKey(KeyCode.E))
             tileUnderMouse.SetTileType(TileType.Wall);
+
+        // ROAD
+        if (Input.GetKey(KeyCode.R))
+            tileUnderMouse.SetTileType(TileType.Road);
+
+        // RIVER
+        if (Input.GetKey(KeyCode.T))
+            tileUnderMouse.SetTileType(TileType.River);
 
         RepaintMap();
     }
@@ -72,6 +93,12 @@ public class MapManager : MonoBehaviour
             return rayHit.transform.GetComponent<Tile>();
         else
             return null;
+    }
+
+    private bool CanPlace(Tile tile)
+    {
+        // START and END can only be placed on plains
+        return tile.GetTileType() == TileType.Plains;
     }
 
     public void RepaintMap()
