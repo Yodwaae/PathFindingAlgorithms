@@ -195,6 +195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
   pathFinding: {fileID: 166965206}
   mapGenerator: {fileID: 166965204}
+  travelerPrefab: {fileID: 4826358578616432112, guid: af76530c8b77eae48aa3d8a6ce6bbb48, type: 3}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

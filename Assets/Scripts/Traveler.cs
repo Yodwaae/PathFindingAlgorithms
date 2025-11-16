@@ -50,6 +50,9 @@ public class Traveler : MonoBehaviour
                 // Update the lerpValue and move accordingly
                 lerpValue += Time.deltaTime * effectiveSpeed;
                 transform.position = Vector3.Lerp(lastTile.transform.position, nextTile.transform.position, lerpValue);
+
+                // Mandatory so we send back the control to Unity so it can move the traveler
+                yield return null;
             }
 
             // When arrived the nextTile now becomes the lastTile

@@ -78,7 +78,7 @@ public class Tile : MonoBehaviour
         switch (tileType){
 
             case TileType.Road:
-                return 0;
+                return 1; // TODO Replaced 0 by because of the implementation of the traveler (would have caused division by 0), change int to float and set road to .5 ?
 
             case TileType.Plains:
                 return 1;

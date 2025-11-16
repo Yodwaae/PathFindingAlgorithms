@@ -5,12 +5,18 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     // Scripts references
+    [Header("Script References")]
     public PathFindingAlgorithm pathFinding;
     public MapGenerator mapGenerator;
 
     // Path 
     private Tile startTile;
     private Tile endTile;
+
+    // Traveler ref
+    public GameObject travelerPrefab;
+    private Traveler traveler;
+
 
     private void Update() { HandleInput(); }
 
@@ -29,7 +35,7 @@ public class MapManager : MonoBehaviour
 
     private void HandleInput()
     {
-        // ===== ALGORITHM CHANGE =====
+        // ===== ALGORITHM/TRAVELER MODIFICATIONS =====
         if (Input.GetKey(KeyCode.Q))
         {
             pathFinding.SetAlgorithm(Algorithm.AStar);
@@ -40,6 +46,19 @@ public class MapManager : MonoBehaviour
         {
             pathFinding.SetAlgorithm(Algorithm.Dijkstra);
             RepaintMap();
+        }
+
+        if (startTile != null && endTile != null && Input.GetKey(KeyCode.F))
+        {
+            // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
+            if (traveler == null)
+                traveler = Instantiate(travelerPrefab, startTile.transform.position, Quaternion.identity).GetComponent<Traveler>();
+            else
+                traveler.transform.position = traveler.transform.position;
+
+            // Compute the path and set it as the traveler's path
+            Queue<Tile> path = pathFinding.FindPath(startTile, endTile);
+            traveler.SetPath(path);
         }
 
         // ===== TILES MODIFICATION =====
