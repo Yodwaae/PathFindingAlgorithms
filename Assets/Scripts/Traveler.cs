@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+// TODO Case no path available what do I do
 public class Traveler : MonoBehaviour
 {
     [Header("Movement Values")]
     public float moveSpeed = 1f;
-    public float startWaitTime = 1f;
+    public float waitTime = 1f;
 
     // TRAVELING
     public bool isTraveling;
@@ -26,10 +28,12 @@ public class Traveler : MonoBehaviour
 
     private IEnumerator MoveAlongPath()
     {
-        if (!isTraveling)
+        // If the traveler was not yet traveling wait a small time before starting moving along the path
+        if (!isTraveling){
             isTraveling = true;
-        // Wait a small time before starting moving along the path
-        yield return new WaitForSeconds(startWaitTime);
+            yield return new WaitForSeconds(waitTime);
+
+        }
 
         // Get the first tile of the path (startTile) as the first pos
         Tile lastTile = pathToFollow.Pop();
@@ -40,7 +44,7 @@ public class Traveler : MonoBehaviour
             // Reset the lerpValue, set the next tile to reach and rotate the model so it faces the path
             float lerpValue = 0;
             Tile nextTile = pathToFollow.Pop();
-            transform.LookAt(nextTile.GetTravelerInstantiationPos(), Vector3.up);
+            transform.LookAt(nextTile.GetPathPos(), Vector3.up);
 
             // While we haven't the center of the next tile keep moving
             while (lerpValue < 1) {
@@ -55,7 +59,7 @@ public class Traveler : MonoBehaviour
 
                 // Update the lerpValue and move accordingly
                 lerpValue += Time.deltaTime * effectiveSpeed;
-                transform.position = Vector3.Lerp(lastTile.GetTravelerInstantiationPos(), nextTile.GetTravelerInstantiationPos(), lerpValue);
+                transform.position = Vector3.Lerp(lastTile.GetPathPos(), nextTile.GetPathPos(), lerpValue);
 
                 // Mandatory so we send back the control to Unity so it can move the traveler
                 yield return null;
@@ -64,8 +68,9 @@ public class Traveler : MonoBehaviour
             // When arrived the nextTile now becomes the lastTile
             lastTile = nextTile;
         }
-    
-        // When the traveler as reached the destination destroy the game object
+
+        // When the traveler as reached the destination, wait a small time before destroying the game object
+        yield return new WaitForSeconds(waitTime);
         Destroy(gameObject);
     }
 }

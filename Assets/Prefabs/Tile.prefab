@@ -282,7 +282,7 @@ MonoBehaviour:
   wall: {fileID: 3273717315051229945}
   road: {fileID: 2805378861322044232}
   river: {fileID: 3520754339148195561}
-  travelerInstantiationTransform: {fileID: 7863839919865050818}
+  pathTransform: {fileID: 7863839919865050818}
 --- !u!33 &5659120978760278323
 MeshFilter:
   m_ObjectHideFlags: 0

@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO Add A security not moving start (at least) when the traveler is spawned
-// TODO Add despawn the traveler when it reches the end tile
-
 public class MapManager : MonoBehaviour
 {
     // Scripts references
@@ -80,7 +77,7 @@ public class MapManager : MonoBehaviour
         if (startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
             // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
             if (traveler == null)
-                traveler = Instantiate(travelerPrefab, startTile.GetTravelerInstantiationPos(), Quaternion.identity).GetComponent<Traveler>();
+                traveler = Instantiate(travelerPrefab, startTile.GetPathPos(), Quaternion.identity).GetComponent<Traveler>();
 
             return true;
         }
@@ -150,8 +147,14 @@ public class MapManager : MonoBehaviour
             return null;
     }
 
-    // START and END can only be placed on plains
-    private bool CanPlace(Tile tile) { return tile.GetTileType() == TileType.Plains; }
+    // START and END can only be placed on plains and not while the traveler is traveling
+    private bool CanPlace(Tile tile) 
+    {
+        if (traveler != null)
+            return (tile.GetTileType() == TileType.Plains && !traveler.isTraveling);
+        else
+            return tile.GetTileType() == TileType.Plains;
+    }
 
     public void RepaintMap()
     {
