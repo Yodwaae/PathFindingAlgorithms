@@ -35,7 +35,7 @@ public class Tile : MonoBehaviour
     public void SetText(string text) { tileText.text = text; }
     public void SetColor(Color color) { tileRenderer.material.color = color; }
 
-    public void SetTileType(TileType type)
+    public bool SetTileType(TileType type)
     {
         tileType = type;
         woods.SetActive(false);
@@ -63,6 +63,9 @@ public class Tile : MonoBehaviour
                 river.SetActive(true);
                 break;
         }
+        
+        // Returns a bool so it can be used efficiently in MapManager
+        return true;
     }
 
 

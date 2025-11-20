@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO Add A security not moving start (at least) when the traveler is spawned
+// TODO Add despawn the traveler when it reches the end tile
+
 public class MapManager : MonoBehaviour
 {
     // Scripts references
@@ -18,7 +21,17 @@ public class MapManager : MonoBehaviour
     private Traveler traveler;
 
 
-    private void Update() { HandleInput(); }
+    private void Update()
+    { 
+        // Handle the Inputs
+        bool mapChanged = HandleMapInput();
+        bool travelerChanged = HandleTravelerInput();
+
+        // If there was a change repaint the map
+        if (mapChanged || travelerChanged)
+            RepaintMap();
+
+    }
 
     private void CalculatePath()
     {
@@ -30,74 +43,84 @@ public class MapManager : MonoBehaviour
             foreach (Tile tile in path)
                 if (tile != endTile && tile != startTile)
                     tile.SetColor(Color.white);
-                
+
+        // If there's a traveler set it's path
+        if (traveler != null)
+            traveler.SetPath(path);
     }
 
-    private void HandleInput()
+    private bool HandleTravelerInput()
     {
-        // ===== ALGORITHM/TRAVELER MODIFICATIONS =====
-        if (Input.GetKey(KeyCode.Q))
-        {
+        // AStar
+        if (Input.GetKey(KeyCode.Q)){
             pathFinding.SetAlgorithm(Algorithm.AStar);
-            RepaintMap();
+            return true;
         }
 
-        if (Input.GetKey(KeyCode.D))
-        {
+        // Dijkstra
+        if (Input.GetKey(KeyCode.D)){
             pathFinding.SetAlgorithm(Algorithm.Dijkstra);
-            RepaintMap();
+            return true;
         }
 
-        if (startTile != null && endTile != null && Input.GetKey(KeyCode.F))
-        {
+        // Spawn the traveler
+        if (startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
             // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
             if (traveler == null)
                 traveler = Instantiate(travelerPrefab, startTile.transform.position, Quaternion.identity).GetComponent<Traveler>(); //TODO Fix the traveler half in the ground
-            else
-                traveler.transform.position = traveler.transform.position;
 
-            // Compute the path and set it as the traveler's path
-            Queue<Tile> path = pathFinding.FindPath(startTile, endTile);
-            traveler.SetPath(path);
+            return true;
         }
 
-        // ===== TILES MODIFICATION =====
-        // Check the player tile hovering (todo redo this comment)
+        // If the code execute up to here then no changes happened
+        return false;
+    }
+
+    private bool HandleMapInput()
+    {
+
+        // Check which tile is hovered if any 
         Tile tileUnderMouse = GetTileUnderMouse();
 
         // If the player is not hovering a tile or hovering the start or end tile, make an early return
         if (tileUnderMouse == null || tileUnderMouse == endTile || tileUnderMouse == startTile)
-            return;
+            return false;
 
         // START
-        if (Input.GetMouseButtonDown(0) && CanPlace(tileUnderMouse))
+        if (Input.GetMouseButtonDown(0) && CanPlace(tileUnderMouse)) {
             startTile = tileUnderMouse;
+            return true;
+        }
 
         // END
-        if (Input.GetMouseButtonDown(1) && CanPlace(tileUnderMouse))
+        if (Input.GetMouseButtonDown(1) && CanPlace(tileUnderMouse)){        
             endTile = tileUnderMouse;
+            return true;
+        }
         
         // PLAINS
         if (Input.GetKey(KeyCode.A))
-            tileUnderMouse.SetTileType(TileType.Plains);
+            return tileUnderMouse.SetTileType(TileType.Plains);
         
         // WOODS
         if (Input.GetKey(KeyCode.W))
-            tileUnderMouse.SetTileType(TileType.Woods);
+           return tileUnderMouse.SetTileType(TileType.Woods);
+  
 
         // WALL
         if (Input.GetKey(KeyCode.E))
-            tileUnderMouse.SetTileType(TileType.Wall);
-
+            return tileUnderMouse.SetTileType(TileType.Wall);
+            
         // ROAD
         if (Input.GetKey(KeyCode.R))
-            tileUnderMouse.SetTileType(TileType.Road);
+            return tileUnderMouse.SetTileType(TileType.Road);
 
         // RIVER
         if (Input.GetKey(KeyCode.T))
-            tileUnderMouse.SetTileType(TileType.River);
+            return tileUnderMouse.SetTileType(TileType.River);
 
-        RepaintMap();
+        // If code execute to here then no changes have been made
+        return false;
     }
 
     private Tile GetTileUnderMouse()
@@ -114,11 +137,8 @@ public class MapManager : MonoBehaviour
             return null;
     }
 
-    private bool CanPlace(Tile tile)
-    {
-        // START and END can only be placed on plains
-        return tile.GetTileType() == TileType.Plains;
-    }
+    // START and END can only be placed on plains
+    private bool CanPlace(Tile tile) { return tile.GetTileType() == TileType.Plains; }
 
     public void RepaintMap()
     {
@@ -141,4 +161,5 @@ public class MapManager : MonoBehaviour
         if (startTile != null && endTile != null)
             CalculatePath();
     }
+
 }

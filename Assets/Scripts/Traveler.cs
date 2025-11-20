@@ -9,6 +9,8 @@ public class Traveler : MonoBehaviour
     public float moveSpeed = 1f;
     public float startWaitTime = 1f;
 
+    // TRAVELING
+    public bool isTraveling;
     private Stack<Tile> pathToFollow;
 
     public void SetPath(Queue<Tile> path)
