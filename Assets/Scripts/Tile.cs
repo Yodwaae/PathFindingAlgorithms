@@ -26,6 +26,7 @@ public class Tile : MonoBehaviour
     private TileType tileType = TileType.Plains;
     private int xCoord;
     private int yCoord;
+    [SerializeField] private Transform travelerInstantiationTransform;
 
     // === Components ===
     private TextMeshProUGUI tileText;
@@ -72,6 +73,7 @@ public class Tile : MonoBehaviour
     // === GETTERS ===
     public int GetXCoord() { return xCoord; }
     public int GetYCoord() { return yCoord; }
+    public Vector3 GetTravelerInstantiationPos() { return travelerInstantiationTransform.position; }
     public TileType GetTileType() { return tileType; }
     public Color GetColor() { return tileRenderer.material.color; }
     public string GetText() { return tileText.text; }

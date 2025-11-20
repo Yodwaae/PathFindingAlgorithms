@@ -258,6 +258,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7863839919865050818}
   - {fileID: 4628335785570143274}
   - {fileID: 242677900506663386}
   - {fileID: 8070277041096737348}
@@ -281,6 +282,7 @@ MonoBehaviour:
   wall: {fileID: 3273717315051229945}
   road: {fileID: 2805378861322044232}
   river: {fileID: 3520754339148195561}
+  travelerInstantiationTransform: {fileID: 7863839919865050818}
 --- !u!33 &5659120978760278323
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1522,6 +1524,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &6066495225931434621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7863839919865050818}
+  m_Layer: 0
+  m_Name: TravelerInstantiatePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7863839919865050818
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066495225931434621}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5303075667221638505}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6263051795158905178
 GameObject:
   m_ObjectHideFlags: 0

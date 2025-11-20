@@ -35,6 +35,19 @@ public class MapManager : MonoBehaviour
 
     private void CalculatePath()
     {
+        // NOTE : The tile under the player should NEVER be null
+        // If the player is already traveling, dynamically change the starting point to the pile at it's position
+        if (traveler != null && traveler.isTraveling) {
+
+            // Creates the rays to check the tile under the player
+            Ray ray = new Ray(traveler.transform.position, Vector3.down * 100); 
+            RaycastHit rayHit;
+
+            // Get the tile under the player and set it as the new starting point
+            bool wasHit = Physics.Raycast(ray, out rayHit, int.MaxValue, LayerMask.GetMask("Tiles"));
+            startTile = rayHit.transform.GetComponent<Tile>();
+        }
+
         // Call the path finding algo
         Queue<Tile> path = pathFinding.FindPath(startTile, endTile);
         
@@ -67,7 +80,7 @@ public class MapManager : MonoBehaviour
         if (startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
             // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
             if (traveler == null)
-                traveler = Instantiate(travelerPrefab, startTile.transform.position, Quaternion.identity).GetComponent<Traveler>(); //TODO Fix the traveler half in the ground
+                traveler = Instantiate(travelerPrefab, startTile.GetTravelerInstantiationPos(), Quaternion.identity).GetComponent<Traveler>();
 
             return true;
         }

@@ -26,6 +26,8 @@ public class Traveler : MonoBehaviour
 
     private IEnumerator MoveAlongPath()
     {
+        if (!isTraveling)
+            isTraveling = true;
         // Wait a small time before starting moving along the path
         yield return new WaitForSeconds(startWaitTime);
 
@@ -38,7 +40,7 @@ public class Traveler : MonoBehaviour
             // Reset the lerpValue, set the next tile to reach and rotate the model so it faces the path
             float lerpValue = 0;
             Tile nextTile = pathToFollow.Pop();
-            transform.LookAt(nextTile.transform, Vector3.up);
+            transform.LookAt(nextTile.GetTravelerInstantiationPos(), Vector3.up);
 
             // While we haven't the center of the next tile keep moving
             while (lerpValue < 1) {
@@ -53,7 +55,7 @@ public class Traveler : MonoBehaviour
 
                 // Update the lerpValue and move accordingly
                 lerpValue += Time.deltaTime * effectiveSpeed;
-                transform.position = Vector3.Lerp(lastTile.transform.position, nextTile.transform.position, lerpValue);
+                transform.position = Vector3.Lerp(lastTile.GetTravelerInstantiationPos(), nextTile.GetTravelerInstantiationPos(), lerpValue);
 
                 // Mandatory so we send back the control to Unity so it can move the traveler
                 yield return null;
@@ -62,5 +64,8 @@ public class Traveler : MonoBehaviour
             // When arrived the nextTile now becomes the lastTile
             lastTile = nextTile;
         }
+    
+        // When the traveler as reached the destination destroy the game object
+        Destroy(gameObject);
     }
 }
