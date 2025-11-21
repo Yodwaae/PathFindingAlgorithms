@@ -78,24 +78,24 @@ public class Tile : MonoBehaviour
     public Color GetColor() { return tileRenderer.material.color; }
     public string GetText() { return tileText.text; }
     // NOTE I wanted to avoid a switch case with magics numbers but for a project this small the other approach seemed overkill
-    public int GetCost()
+    public float GetCost()
     {
         switch (tileType){
 
             case TileType.Road:
-                return 1; // TODO Replaced 0 by because of the implementation of the traveler (would have caused division by 0), change int to float and set road to .5 ?
+                return .5f;
 
             case TileType.Plains:
-                return 1;
+                return 1f;
 
             case TileType.Woods:
-                return 3;
+                return 3f;
 
             case TileType.River:
-                return 5;
+                return 5f;
 
             default:
-                return 0;
+                return 1f;
         }
     } 
 

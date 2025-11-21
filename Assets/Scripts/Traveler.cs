@@ -28,23 +28,34 @@ public class Traveler : MonoBehaviour
 
     private IEnumerator MoveAlongPath()
     {
-        // If the traveler was not yet traveling wait a small time before starting moving along the path
-        if (!isTraveling){
-            isTraveling = true;
-            yield return new WaitForSeconds(waitTime);
-
-        }
-
-        // Get the first tile of the path (startTile) as the first pos
+        // Initialisation
+        Vector3 startPos;
+        Vector3 endPos;
         Tile lastTile = pathToFollow.Pop();
 
+        // If the traveler was not yet traveling set the startingTilePos as the startPos
+        // Else the set the Traveler pos as the startPos
+        if (!isTraveling) {
+
+            // Wait a small time before starting moving along the path
+            yield return new WaitForSeconds(waitTime);
+
+            isTraveling = true;
+            startPos = lastTile.GetPathPos();
+
+        }
+        else
+            startPos = gameObject.transform.position;
+
+
         // While there is still tile in the path
-        while (pathToFollow.Count > 0)
-        {
-            // Reset the lerpValue, set the next tile to reach and rotate the model so it faces the path
+        while (pathToFollow.Count > 0) {
+
+            // Loop Initialisation
             float lerpValue = 0;
             Tile nextTile = pathToFollow.Pop();
-            transform.LookAt(nextTile.GetPathPos(), Vector3.up);
+            endPos = nextTile.GetPathPos();
+            transform.LookAt(endPos, Vector3.up);
 
             // While we haven't the center of the next tile keep moving
             while (lerpValue < 1) {
@@ -59,14 +70,14 @@ public class Traveler : MonoBehaviour
 
                 // Update the lerpValue and move accordingly
                 lerpValue += Time.deltaTime * effectiveSpeed;
-                transform.position = Vector3.Lerp(lastTile.GetPathPos(), nextTile.GetPathPos(), lerpValue);
+                transform.position = Vector3.Lerp(startPos, endPos, lerpValue);
 
                 // Mandatory so we send back the control to Unity so it can move the traveler
                 yield return null;
             }
 
-            // When arrived the nextTile now becomes the lastTile
-            lastTile = nextTile;
+            // When arrived the EndPos becomes the startPos now becomes the lastTile
+            startPos = endPos;
         }
 
         // When the traveler as reached the destination, wait a small time before destroying the game object

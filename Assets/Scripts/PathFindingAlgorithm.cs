@@ -21,7 +21,7 @@ public class PathFindingAlgorithm : MonoBehaviour
         // Initialisation
         Queue<Tile> path = new Queue<Tile>(); // Queue the function will return, containing the path
         Dictionary<Tile, Tile> NextTileToGoal = new Dictionary<Tile, Tile>(); // Queue we will use to reconstruct the path once the end is found
-        Dictionary<Tile, int> costToReachTile = new Dictionary<Tile, int>(); // Queue containing the cost to reach the tiles for every tile we explored
+        Dictionary<Tile, float> costToReachTile = new Dictionary<Tile, float>(); // Queue containing the cost to reach the tiles for every tile we explored
         PathFindingQueue<Tile> frontier = new PathFindingQueue<Tile>(); // Priority queue used to organise in which order we search the tiles
 
         // Start exploring from the start tile
@@ -40,8 +40,8 @@ public class PathFindingAlgorithm : MonoBehaviour
             foreach (Tile neighbor in mapGenerator.GetNeighbors(curTile)) {
 
                 // Loop Initialisation
-                int priority = 0;
-                int newCost = costToReachTile[curTile] + neighbor.GetCost();
+                float priority = 0;
+                float newCost = costToReachTile[curTile] + neighbor.GetCost();
 
                 // If the tile has been visited or the path is costier than what we found, skip it
                 if (costToReachTile.ContainsKey(neighbor) && newCost >= costToReachTile[neighbor])
@@ -90,6 +90,6 @@ public class PathFindingAlgorithm : MonoBehaviour
         currentAlgorithm = algorithm; }
 
     // Helper function
-    int Distance(Tile tile1, Tile tile22) { return Mathf.Abs(tile1.GetXCoord() - tile22.GetXCoord()) + Mathf.Abs(tile1.GetYCoord() - tile22.GetYCoord()); }
+    float Distance(Tile tile1, Tile tile22) { return Mathf.Abs(tile1.GetXCoord() - tile22.GetXCoord()) + Mathf.Abs(tile1.GetYCoord() - tile22.GetYCoord()); }
 
 }

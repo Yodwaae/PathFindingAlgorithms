@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public class PathFindingQueue<T>
 {
     // First Element is the Tile, 2nd is the cost to reach it
-    private List<Tuple<T, int>> elements = new List<Tuple<T, int>>();
+    private List<Tuple<T, float>> elements = new List<Tuple<T, float>>();
 
-    public void Enqueue(T item, int priority){ elements.Add(Tuple.Create(item, priority)); }
+    public void Enqueue(T item, float priority){ elements.Add(Tuple.Create(item, priority)); }
 
     public T Dequeue()
     {
