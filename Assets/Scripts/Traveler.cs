@@ -76,8 +76,9 @@ public class Traveler : MonoBehaviour
                 yield return null;
             }
 
-            // When arrived the EndPos becomes the startPos now becomes the lastTile
+            // When arrived, the EndPos becomes the startPos, idem for last and next tile
             startPos = endPos;
+            lastTile = nextTile;
         }
 
         // When the traveler as reached the destination, wait a small time before destroying the game object
