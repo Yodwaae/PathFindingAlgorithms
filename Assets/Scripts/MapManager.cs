@@ -73,12 +73,10 @@ public class MapManager : MonoBehaviour
             return true;
         }
 
-        // Spawn the traveler
-        if (startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
-            // If the travaler has not been instantiated yet, instantiate it on the starting tile, else just place it on the starting tile
-            if (traveler == null)
-                traveler = Instantiate(travelerPrefab, startTile.GetPathPos(), Quaternion.identity).GetComponent<Traveler>();
-
+        // If the travaler has not been instantiated yet, instantiate it on the starting tile
+        if (traveler == null && startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
+            // Spawn the traveler
+            traveler = Instantiate(travelerPrefab, startTile.GetPathPos(), Quaternion.identity).GetComponent<Traveler>();
             return true;
         }
 
