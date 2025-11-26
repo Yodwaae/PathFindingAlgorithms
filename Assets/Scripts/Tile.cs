@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -22,6 +23,11 @@ public class Tile : MonoBehaviour
     public GameObject road;
     public GameObject river;
 
+    public Color riverPathColor;
+    public Color riverBaseColor;
+    public Color roadBaseColor;
+    public Color roadPathColor;
+
     // === Tile values ===
     private TileType tileType = TileType.Plains;
     private int xCoord;
@@ -36,8 +42,17 @@ public class Tile : MonoBehaviour
     public void SetText(string text) { tileText.text = text; }
     public void SetColor(Color color) { 
         tileRenderer.material.color = color;
-        road.GetComponent<Renderer>().material.color = Color.lightBlue;
-        river.GetComponent<Renderer>().material.color = Color.lightGray;
+
+        if (color == Color.white)
+        {
+            road.GetComponent<Renderer>().material.color = roadPathColor;
+            river.GetComponent<Renderer>().material.color = riverPathColor;
+        }
+        else
+        {
+            road.GetComponent<Renderer>().material.color = roadBaseColor;
+            river.GetComponent<Renderer>().material.color = riverBaseColor;
+        }
     }
 
     public bool SetTileType(TileType type)

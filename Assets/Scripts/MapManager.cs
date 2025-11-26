@@ -12,6 +12,7 @@ public class MapManager : MonoBehaviour
     // Path 
     private Tile startTile;
     private Tile endTile;
+    private Tile lookAtTile;
 
     // Traveler ref
     public GameObject travelerPrefab;
@@ -47,7 +48,15 @@ public class MapManager : MonoBehaviour
 
         // Call the path finding algo
         Queue<Tile> path = pathFinding.FindPath(startTile, endTile);
-        
+
+
+        // Get the first tile after the startTile to rotate the traveler, if there's only a start and endTile get the endTile instead
+        List<Tile> pathList = new List<Tile>(path);
+        if (pathList.Count > 2)
+            lookAtTile = pathList[pathList.Count - 2];
+        else
+            lookAtTile = endTile;
+
         // Change the color of the tiles on the paths (excluding the start and end tile)
         if (path != null)
             foreach (Tile tile in path)
@@ -77,6 +86,10 @@ public class MapManager : MonoBehaviour
         if (traveler == null && startTile != null && endTile != null && Input.GetKey(KeyCode.F)) {
             // Spawn the traveler
             traveler = Instantiate(travelerPrefab, startTile.GetPathPos(), Quaternion.identity).GetComponent<Traveler>();
+
+            // Immediately orient toward the end tile
+            traveler.transform.LookAt(lookAtTile.GetPathPos(), Vector3.up);
+
             return true;
         }
 
