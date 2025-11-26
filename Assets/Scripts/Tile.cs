@@ -34,7 +34,11 @@ public class Tile : MonoBehaviour
 
     // === SETTERS ===
     public void SetText(string text) { tileText.text = text; }
-    public void SetColor(Color color) { tileRenderer.material.color = color; }
+    public void SetColor(Color color) { 
+        tileRenderer.material.color = color;
+        road.GetComponent<Renderer>().material.color = Color.lightBlue;
+        river.GetComponent<Renderer>().material.color = Color.lightGray;
+    }
 
     public bool SetTileType(TileType type)
     {
