@@ -59,7 +59,7 @@ public class PathFindingAlgorithm : MonoBehaviour
                 else if (currentAlgorithm == Algorithm.Dijkstra)
                     priority = newCost;
 
-                // Add the neighbor to the list of tile to explore, then egister how to go back to the start from the tile
+                // Add the neighbor to the list of tile to explore, then register how to go back to the start from the tile
                 // and finally set the text of the tile to the cost to reach it
                 frontier.Enqueue(neighbor, priority);
                 NextTileToGoal[neighbor] = curTile;
@@ -74,7 +74,7 @@ public class PathFindingAlgorithm : MonoBehaviour
             return null;
 
 
-        // Rebuild the path by walking from start -> end using NextTileToGoal
+        // Rebuild the path by walking from end -> start using NextTileToGoal
         Tile pathTile = end;
 
         while (pathTile != start) {
